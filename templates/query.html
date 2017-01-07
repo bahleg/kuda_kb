@@ -1,0 +1,113 @@
+{% extends "bootstrap/base.html" %}
+{% block title %}Запрос{% endblock %}
+<!---
+Дата: 2 разновидности
+Категории
+Тэги
+Цена
+-->
+
+{% block content %}
+<link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap.tagsinput/0.4.2/bootstrap-tagsinput.css"/>
+
+<div class="panel panel-default">
+    <div class="panel-body">
+
+        <form method="post">
+            <div class="form-group">
+                <input type="number" id="time_to_travel" name="time_to_travel" placeholder="Время в пути" required>
+                <label for="use_car">На машине</label>
+                <input type="checkbox" id="use_car" name="use_car">
+            </div>
+
+            <div class="form-group" id="date_now_form">
+
+
+                <button type=button class="btn-default" id="my_loc" name="my_loc" onclick="getLocation()"> Мое
+                    местоположение
+                </button>
+
+                <br/>
+                <input id="address" name="address" type="text" required placeholder="Адрес">
+
+
+            </div>
+
+            <div class="btn-group" data-toggle="buttons">
+                <label class="btn btn-primary">
+                    <input type="radio" name="search_events" id="option1"> Искать события
+                </label>
+                <label class="btn btn-primary">
+                    <input type="radio" name="search_places" id="option2"> Искать места
+                </label>
+                <label class="btn btn-primary active">
+                    <input type="radio" name="search_both" id="option3" checked> Искать места и события
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label for="categories">Категории</label>
+                <select multiple class="form-control" name="cats" id="categories">
+                    {% for cat in cats %}
+                    <option>{{cat}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <input type="text" name="tags" class="form-control" id="tags"
+                       placeholder="тэги">
+
+            </div>
+
+            <div class="form-group">
+                <label for="price">Максимальная цена</label>
+                <input name="price" type="number" class="form-control" id="price"
+                       value="0">
+            </div>
+            <button class="btn-default" type="submit">Го</button>
+        </form>
+    </div>
+</div>
+<script>
+var x = document.getElementById("address");
+
+
+function geo_err(err) {
+	alert('error :'+err+':'+err.code+':'+err.message);
+	alert('try to use third-party geolocation');
+        $.getJSON('https://ipinfo.io/geo', function(response) { 
+        var loc = response.loc.split(',');
+        var coords = {
+            latitude: loc[0],
+            longitude: loc[1]
+        };
+        x.value = + loc[0] +  ";" + loc[1];
+        });
+	}  
+
+function getLocation() {
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, geo_err,{enableHighAccuracy: true, maximumAge: 6000, timeout:30000} );
+    } else {
+	alert('error')
+        x.value = "Geolocation is not supported by this browser.";
+    }
+}
+
+function showPosition(position) {
+    x.value = + position.coords.latitude +
+    ";" + position.coords.longitude;
+}
+
+
+
+</script>
+<script>
+    getLocation();
+
+
+
+</script>
+{% endblock %}

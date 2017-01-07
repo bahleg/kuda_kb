@@ -1,0 +1,22 @@
+<!doctype html>
+<title>Авторизация</title>
+{% block body %}
+<script src="./static/js/jquery-3.1.1.min.js"></script>
+<script src="./static/js/jquery.md5.js"></script>
+<form name="form" method="post" action="{{url_for('page_auth')}}">
+    <label for="login">Логин</label>
+    <br/>
+    <input type="text" name="login" id="login">
+
+    <p></p>
+    <br/>
+    <label for="pass">Пароль</label>
+    <br/>
+
+    <p></p>
+    <br/>
+    <input type="password" name="pass" id="pass">
+    <br/>
+    <input type="submit" onclick="$('#pass').val($.md5($('#pass').val()));" id="ok">
+</form>
+{% endblock %}
